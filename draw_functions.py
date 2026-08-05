@@ -67,6 +67,24 @@ def draw_starting_position(screen):
     draw_king(400,700,True,screen)
 
 
+def draw_position(position, screen):
+    for i in range(64):
+        if position[i] != 0:
+            x = i % 8
+            y = i // 8
+            if position[i] == 1: draw_pawn(x*100,y*100,True,screen)
+            elif position[i] == -1: draw_pawn(x*100,y*100,False,screen)
+            if position[i] == 2: draw_rook(x*100,y*100,True,screen)
+            elif position[i] == -2: draw_rook(x*100,y*100,False,screen)
+            if position[i] == 3: draw_knight(x*100,y*100,True,screen)
+            elif position[i] == -3: draw_knight(x*100,y*100,False,screen)
+            if position[i] == 4: draw_bishop(x*100,y*100,True,screen)
+            elif position[i] == -4: draw_bishop(x*100,y*100,False,screen)
+            if position[i] == 5: draw_queen(x*100,y*100,True,screen)
+            elif position[i] == -5: draw_queen(x*100,y*100,False,screen)
+            if position[i] == 6: draw_king(x*100,y*100,True,screen)
+            elif position[i] == -6: draw_king(x*100,y*100,False,screen)
+
 def _colors(white):
     if white:
         fill = (245, 245, 235)

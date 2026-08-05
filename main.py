@@ -1,5 +1,6 @@
 import pygame
 from draw_functions import *
+from chessboard import *
 
 pygame.init()
 
@@ -13,7 +14,7 @@ run = True
 while run:
     mouse_pos = pygame.mouse.get_pos()
     draw_board(screen, mouse_pos)
-    draw_starting_position(screen)
+    draw_position(get_position(),screen)
     pygame.display.update()
 
     for event in pygame.event.get():
