@@ -85,6 +85,14 @@ def draw_position(position, screen):
             if position[i] == 6: draw_king(x*100,y*100,True,screen)
             elif position[i] == -6: draw_king(x*100,y*100,False,screen)
 
+
+def draw_legal_moves(move_list, screen):
+    for i in move_list:
+        x = i % 8
+        y = i // 8
+        pygame.draw.circle(screen,(255,0,0),(x*100 + 50, y*100 + 50), 25)
+
+
 def _colors(white):
     if white:
         fill = (245, 245, 235)
