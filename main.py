@@ -20,6 +20,8 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_pos = pygame.mouse.get_pos()
+            print(get_square_index(mouse_pos[0], mouse_pos[1]))
 pygame.quit()
 

@@ -20,3 +20,7 @@ position = starting_position
 
 def get_position():
     return position
+
+def get_square_index(x,y):
+    index = (y//100) * 8 + (x//100)
+    return index
