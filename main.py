@@ -33,6 +33,7 @@ while run:
             
             mouse_pos = pygame.mouse.get_pos()
             clicked_index = get_square_index(mouse_pos[0], mouse_pos[1])
+            print(clicked_index)
             if clicked_index in legal_moves:
                 move_piece(last_clicked_index, clicked_index)
                 # change turn after move
@@ -43,7 +44,7 @@ while run:
             if clicked_piece*turn < 0: 
                 clicked_piece = 0
                 clicked_index = -1
-            legal_moves = get_legal_moves_pawn(clicked_index)
+            legal_moves = get_legal_moves_knight(clicked_index)
     
     
 pygame.quit()

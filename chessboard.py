@@ -68,3 +68,74 @@ def get_legal_moves_pawn(index):
             legal_moves.append(index-7)
 
     return legal_moves
+
+
+def get_legal_moves_knight(index):
+    if position[index] < 0: black = True
+    elif position[index] > 0: black = False
+    else: return []
+    moves = []
+
+    # add all 8 possible moves for the knight
+    moves.append(index + 10) # unten rechts rechts
+    moves.append(index + 6)  # unten links links
+    moves.append(index + 17) # unten unten rechts
+    moves.append(index + 15) # unten unten links
+
+    moves.append(index - 10) # oben links links
+    moves.append(index - 6)  # oben rechts rechts
+    moves.append(index - 17) # oben oben links
+    moves.append(index - 15) # oben oben rechts
+
+    # remove the moves that arent possible due to the position of the knight (for example on the edge)
+    # row 1
+    if index // 8 == 0:
+        if index-10 in moves: moves.remove(index-10)
+        if index-6 in moves: moves.remove(index-6)
+        if index-17 in moves: moves.remove(index-17)
+        if index-15 in moves: moves.remove(index-15)
+    # row 2
+    if index // 8 == 1:
+        if index-17 in moves: moves.remove(index-17)
+        if index-15 in moves: moves.remove(index-15)
+    # row 8
+    if index // 8 == 7:
+        if index+10 in moves: moves.remove(index+10)
+        if index+6 in moves: moves.remove(index+6)
+        if index+17 in moves: moves.remove(index+17)
+        if index+15 in moves: moves.remove(index+15)
+    # row 7
+    if index // 8 == 6:
+        if index+17 in moves: moves.remove(index+17)
+        if index+15 in moves: moves.remove(index+15)
+
+    # column 1:
+    if index % 8 == 0:
+        if index+6 in moves: moves.remove(index+6)
+        if index+15 in moves: moves.remove(index+15)
+        if index-10 in moves: moves.remove(index-10)
+        if index-17 in moves: moves.remove(index-17)
+    # column 2:
+    if index % 8 == 1:
+        if index+6 in moves: moves.remove(index+6)
+        if index-10 in moves: moves.remove(index-10)
+    # column 8:
+    if index % 8 == 7:
+        if index+10 in moves: moves.remove(index+10)
+        if index+17 in moves: moves.remove(index+17)
+        if index-6 in moves: moves.remove(index-6)
+        if index-15 in moves: moves.remove(index-15)
+    # column 7:
+    if index % 8 == 6:
+        if index+10 in moves: moves.remove(index+10)
+        if index-6 in moves: moves.remove(index-6)
+
+    legal_moves = []
+    if black:
+        for m in moves: 
+            if position[m] >= 0: legal_moves.append(m)
+    else: 
+        for m in moves:
+            if position[m] <= 0: legal_moves.append(m)
+
+    return legal_moves
