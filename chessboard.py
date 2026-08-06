@@ -139,3 +139,78 @@ def get_legal_moves_knight(index):
             if position[m] <= 0: legal_moves.append(m)
 
     return legal_moves
+
+
+def get_legal_moves_bishop(index):
+    if position[index] < 0: black = True
+    elif position[index] > 0: black = False
+    else: return []
+
+    top_dist = index // 8
+    bot_dist = 7 - top_dist
+    left_dist = index % 8
+    right_dist = 7 - left_dist
+
+    moves = []
+    # top right direction
+    move = index
+    i = 0
+    while i < right_dist and i < top_dist:
+        move -= 7
+        i += 1
+        if position[move] == 0: moves.append(move)
+        elif position[move] < 0 and black: break
+        elif position[move] > 0 and black:
+            moves.append(move)
+            break
+        elif position[move] > 0 and not black: break
+        elif position[move] < 0 and not black:
+            moves.append(move)
+            break
+    # top left direction
+    move = index
+    i = 0
+    while i < left_dist and i < top_dist:
+        move -= 9
+        i += 1
+        if position[move] == 0: moves.append(move)
+        elif position[move] < 0 and black: break
+        elif position[move] > 0 and black:
+            moves.append(move)
+            break
+        elif position[move] > 0 and not black: break
+        elif position[move] < 0 and not black:
+            moves.append(move)
+            break
+    # bottom right direction
+    move = index
+    i = 0
+    while i < right_dist and i < bot_dist:
+        move += 9
+        i += 1
+        if position[move] == 0: moves.append(move)
+        elif position[move] < 0 and black: break
+        elif position[move] > 0 and black:
+            moves.append(move)
+            break
+        elif position[move] > 0 and not black: break
+        elif position[move] < 0 and not black:
+            moves.append(move)
+            break
+    # bottom left direction
+    move = index
+    i = 0
+    while i < left_dist and i < bot_dist:
+        move += 7
+        i += 1
+        if position[move] == 0: moves.append(move)
+        elif position[move] < 0 and black: break
+        elif position[move] > 0 and black:
+            moves.append(move)
+            break
+        elif position[move] > 0 and not black: break
+        elif position[move] < 0 and not black:
+            moves.append(move)
+            break
+    return moves
+    
