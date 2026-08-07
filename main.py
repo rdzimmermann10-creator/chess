@@ -44,7 +44,7 @@ while run:
             if clicked_piece*turn < 0: 
                 clicked_piece = 0
                 clicked_index = -1
-            legal_moves = get_legal_moves_bishop(clicked_index)
+            legal_moves = get_legal_moves(clicked_index)
     
     
 pygame.quit()

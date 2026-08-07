@@ -35,10 +35,23 @@ def move_piece(start, end):
     position[start] = 0
 
 
-def get_legal_moves_pawn(index):
+def get_legal_moves(index):
     if position[index] < 0: black = True
     elif position[index] > 0: black = False
     else: return []
+
+    if position[index] in (1,-1): return get_legal_moves_pawn(index, black)
+    elif position[index] in (2,-2): return get_legal_moves_rook(index, black)
+    elif position[index] in (3,-3): return get_legal_moves_knight(index, black)
+    elif position[index] in (4,-4): return get_legal_moves_bishop(index, black)
+    elif position[index] in (5,-5): return get_legal_moves_queen(index, black)
+    elif position[index] in (6,-6): return get_legal_moves_king(index, black)
+    else: return []
+    
+
+
+
+def get_legal_moves_pawn(index, black):
 
     # get moves forward or two squares forward
     if black:
@@ -70,10 +83,7 @@ def get_legal_moves_pawn(index):
     return legal_moves
 
 
-def get_legal_moves_knight(index):
-    if position[index] < 0: black = True
-    elif position[index] > 0: black = False
-    else: return []
+def get_legal_moves_knight(index, black):
     moves = []
 
     # add all 8 possible moves for the knight
@@ -141,10 +151,7 @@ def get_legal_moves_knight(index):
     return legal_moves
 
 
-def get_legal_moves_bishop(index):
-    if position[index] < 0: black = True
-    elif position[index] > 0: black = False
-    else: return []
+def get_legal_moves_bishop(index, black):
 
     top_dist = index // 8
     bot_dist = 7 - top_dist
@@ -213,4 +220,121 @@ def get_legal_moves_bishop(index):
             moves.append(move)
             break
     return moves
+
+
+def get_legal_moves_rook(index, black):
+
+    top_dist = index // 8
+    bot_dist = 7 - top_dist
+    left_dist = index % 8
+    right_dist = 7 - left_dist
+
+    moves = []
+    # top direction
+    move = index
+    i = 0
+    while i < top_dist:
+        move -= 8
+        i += 1
+        if position[move] == 0: moves.append(move)
+        elif position[move] < 0 and black: break
+        elif position[move] > 0 and black:
+            moves.append(move)
+            break
+        elif position[move] > 0 and not black: break
+        elif position[move] < 0 and not black:
+            moves.append(move)
+            break
+    # left direction
+    move = index
+    i = 0
+    while i < left_dist:
+        move -= 1
+        i += 1
+        if position[move] == 0: moves.append(move)
+        elif position[move] < 0 and black: break
+        elif position[move] > 0 and black:
+            moves.append(move)
+            break
+        elif position[move] > 0 and not black: break
+        elif position[move] < 0 and not black:
+            moves.append(move)
+            break
+    # bottom direction
+    move = index
+    i = 0
+    while i < bot_dist:
+        move += 8
+        i += 1
+        if position[move] == 0: moves.append(move)
+        elif position[move] < 0 and black: break
+        elif position[move] > 0 and black:
+            moves.append(move)
+            break
+        elif position[move] > 0 and not black: break
+        elif position[move] < 0 and not black:
+            moves.append(move)
+            break
+    # right direction
+    move = index
+    i = 0
+    while i < right_dist:
+        move += 1
+        i += 1
+        if position[move] == 0: moves.append(move)
+        elif position[move] < 0 and black: break
+        elif position[move] > 0 and black:
+            moves.append(move)
+            break
+        elif position[move] > 0 and not black: break
+        elif position[move] < 0 and not black:
+            moves.append(move)
+            break
+    return moves
+
+
+def get_legal_moves_queen(index, black):
+    moves_diagonal = get_legal_moves_bishop(index, black)
+    moves_horizontal = get_legal_moves_rook(index, black)
+    return moves_diagonal + moves_horizontal
+
+
+def get_legal_moves_king(index, black):
+    moves = []
+
+    moves = []
+    moves.append(index-9) # oben links
+    moves.append(index-8) # oben
+    moves.append(index-7) # oben rechts
+    moves.append(index+1) # rechts
+    moves.append(index+9) # unten rechts
+    moves.append(index+8) # unten
+    moves.append(index+7) # unten links
+    moves.append(index-1) # links
+
+    if index // 8 == 0:
+        if index-9 in moves: moves.remove(index-9)
+        if index-8 in moves: moves.remove(index-8)
+        if index-7 in moves: moves.remove(index-7)
+    if index // 8 == 7:
+        if index+9 in moves: moves.remove(index+9)
+        if index+8 in moves: moves.remove(index+8)
+        if index+7 in moves: moves.remove(index+7)
+    if index % 8 == 0:
+        if index-9 in moves: moves.remove(index-9)
+        if index+7 in moves: moves.remove(index+7)
+        if index-1 in moves: moves.remove(index-1)
+    if index % 8 == 7:
+        if index-7 in moves: moves.remove(index-7)
+        if index+1 in moves: moves.remove(index+1)
+        if index+9 in moves: moves.remove(index+9)
+
+    legal_moves = []
+    if black:
+        for m in moves: 
+            if position[m] >= 0: legal_moves.append(m)
+    else: 
+        for m in moves:
+            if position[m] <= 0: legal_moves.append(m)
     
+    return legal_moves
