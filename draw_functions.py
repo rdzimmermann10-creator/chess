@@ -93,6 +93,12 @@ def draw_legal_moves(move_list, screen):
         pygame.draw.circle(screen,(255,0,0),(x*100 + 50, y*100 + 50), 25)
 
 
+
+
+
+
+# --------------AI CODE-------------------
+
 def _colors(white):
     if white:
         fill = (245, 245, 235)

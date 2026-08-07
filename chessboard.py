@@ -16,7 +16,16 @@ starting_position = [-2,-3,-4,-5,-6,-4,-3,-2,
                      1, 1, 1, 1, 1, 1, 1, 1,
                      2, 3, 4, 5, 6, 4, 3, 2]
 
-position = starting_position
+test_position = [-2, 0, 0 ,0 ,0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, -6 ,-5 ,0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0 ,0 ,0, 0, 0, 0,
+                 0, 0, 6, 0, 0, 0, 0, 5,
+                 0, 0, 0 ,0 ,0, 0, 0, 0,
+                 2, 0, 0, 0, 0, 0, 0, 0,]
+
+position = test_position
 
 def get_position():
     return position
@@ -71,13 +80,13 @@ def get_legal_moves_pawn(index, black):
         if position[m] == 0: legal_moves.append(m)
 
     # check for opponents pieces to captcher
-    if black and index % 8 != 0 and position[index+7] in [1,2,3,4,5]:
+    if black and index % 8 != 0 and position[index+7] in [1,2,3,4,5,6]:
         legal_moves.append(index+7)
-    if black and index % 8 != 7 and position[index+9] in [1,2,3,4,5]:
+    if black and index % 8 != 7 and position[index+9] in [1,2,3,4,5,6]:
         legal_moves.append(index+9)
-    if not black and index % 8 != 0 and position[index-9] in [-1,-2,-3,-4,-5]:
+    if not black and index % 8 != 0 and position[index-9] in [-1,-2,-3,-4,-5,-6]:
             legal_moves.append(index-9)
-    if not black and index % 8 != 7 and position[index-7] in [-1,-2,-3,-4,-5]:
+    if not black and index % 8 != 7 and position[index-7] in [-1,-2,-3,-4,-5,-6]:
             legal_moves.append(index-7)
 
     return legal_moves
@@ -333,8 +342,16 @@ def get_legal_moves_king(index, black):
     if black:
         for m in moves: 
             if position[m] >= 0: legal_moves.append(m)
+        for i in range(64):
+            if position[i] in (1,2,3,4,5):
+                p_moves = get_legal_moves(i)
+                legal_moves = [move for move in legal_moves if move not in p_moves]
+
     else: 
         for m in moves:
             if position[m] <= 0: legal_moves.append(m)
-    
+        for i in range(64):
+            if position[i] in (-1,-2,-3,-4,-5):
+                p_moves = get_legal_moves(i)
+                legal_moves = [move for move in legal_moves if move not in p_moves]
     return legal_moves
