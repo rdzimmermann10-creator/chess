@@ -25,7 +25,7 @@ test_position = [-2, 0, 0 ,0 ,0, 0, 0, 0,
                  0, 0, 0 ,0 ,0, 0, 0, 0,
                  2, 0, 0, 0, 0, 0, 0, 0,]
 
-position = starting_position
+position = test_position
 
 def get_position():
     return position
@@ -58,7 +58,9 @@ def get_legal_moves(index, check_search = True, position = position):
     elif position[index] in (3,-3): moves = get_legal_moves_knight(index, black)
     elif position[index] in (4,-4): moves = get_legal_moves_bishop(index, black)
     elif position[index] in (5,-5): moves = get_legal_moves_queen(index, black)
-    elif position[index] in (6,-6): moves = get_legal_moves_king(index, black)
+    elif position[index] in (6,-6):
+        if not check_search: moves = get_legal_moves_king(index, black, False) 
+        else: moves = get_legal_moves_king(index, black)
     else: moves = []
 
     if check_search:
@@ -320,7 +322,7 @@ def get_legal_moves_queen(index, black, position = position):
     return moves_diagonal + moves_horizontal
 
 
-def get_legal_moves_king(index, black, position = position):
+def get_legal_moves_king(index, black, check_search = True, position = position):
     moves = []
 
     moves = []
@@ -358,7 +360,8 @@ def get_legal_moves_king(index, black, position = position):
     else: 
         for m in moves:
             if position[m] <= 0: legal_moves.append(m)
-    legal_moves = look_for_checks(index, index, legal_moves, black)
+    if not check_search: return legal_moves
+    else: legal_moves = look_for_checks(index, index, legal_moves, black)
     return legal_moves
 
 
@@ -374,11 +377,11 @@ def look_for_checks(index, king_index, moves, black):
         check = False
         if black:
             for i in range(64):
-                if position[i] in (1,2,3,4,5):
+                if position[i] in (1,2,3,4,5,6):
                     if king_index in get_legal_moves(i, False, copy): check = True
         else:
             for i in range(64):
-                if position[i] in (-1,-2,-3,-4,-5):
+                if position[i] in (-1,-2,-3,-4,-5,-6):
                     if king_index in get_legal_moves(i, False, copy): check = True
         if not check: legal_moves.append(m)
         move_piece(m , index, copy)
