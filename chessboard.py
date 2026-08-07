@@ -25,7 +25,7 @@ test_position = [-2, 0, 0 ,0 ,0, 0, 0, 0,
                  0, 0, 0 ,0 ,0, 0, 0, 0,
                  2, 0, 0, 0, 0, 0, 0, 0,]
 
-position = test_position
+position = starting_position
 
 def get_position():
     return position
@@ -37,14 +37,18 @@ def get_square_index(x,y):
 def get_piece(index):
     return position[index]
 
-def move_piece(start, end):
+def move_piece(start, end, position = position):
     if start not in range(64) or end not in range(64): return
     if position[start] == 0: return
     position[end] = position[start]
     position[start] = 0
 
 
-def get_legal_moves(index):
+def copy_position(position = position):
+    return position
+
+
+def get_legal_moves(index, position = position):
     if position[index] < 0: black = True
     elif position[index] > 0: black = False
     else: return []
@@ -60,7 +64,7 @@ def get_legal_moves(index):
 
 
 
-def get_legal_moves_pawn(index, black):
+def get_legal_moves_pawn(index, black, position = position):
 
     # get moves forward or two squares forward
     if black:
@@ -78,6 +82,8 @@ def get_legal_moves_pawn(index, black):
     # check if piece is blocking the way
     for m in moves:
         if position[m] == 0: legal_moves.append(m)
+    if index+8 not in legal_moves and index+16 in legal_moves: legal_moves.remove(index+16)
+    if index-8 not in legal_moves and index-16 in legal_moves: legal_moves.remove(index-16)
 
     # check for opponents pieces to captcher
     if black and index % 8 != 0 and position[index+7] in [1,2,3,4,5,6]:
@@ -92,7 +98,7 @@ def get_legal_moves_pawn(index, black):
     return legal_moves
 
 
-def get_legal_moves_knight(index, black):
+def get_legal_moves_knight(index, black, position = position):
     moves = []
 
     # add all 8 possible moves for the knight
@@ -160,7 +166,7 @@ def get_legal_moves_knight(index, black):
     return legal_moves
 
 
-def get_legal_moves_bishop(index, black):
+def get_legal_moves_bishop(index, black, position = position):
 
     top_dist = index // 8
     bot_dist = 7 - top_dist
@@ -231,7 +237,7 @@ def get_legal_moves_bishop(index, black):
     return moves
 
 
-def get_legal_moves_rook(index, black):
+def get_legal_moves_rook(index, black, position = position):
 
     top_dist = index // 8
     bot_dist = 7 - top_dist
@@ -302,13 +308,13 @@ def get_legal_moves_rook(index, black):
     return moves
 
 
-def get_legal_moves_queen(index, black):
-    moves_diagonal = get_legal_moves_bishop(index, black)
-    moves_horizontal = get_legal_moves_rook(index, black)
+def get_legal_moves_queen(index, black, position = position):
+    moves_diagonal = get_legal_moves_bishop(index, black, position)
+    moves_horizontal = get_legal_moves_rook(index, black, position)
     return moves_diagonal + moves_horizontal
 
 
-def get_legal_moves_king(index, black):
+def get_legal_moves_king(index, black, position = position):
     moves = []
 
     moves = []
@@ -342,16 +348,30 @@ def get_legal_moves_king(index, black):
     if black:
         for m in moves: 
             if position[m] >= 0: legal_moves.append(m)
-        for i in range(64):
-            if position[i] in (1,2,3,4,5):
-                p_moves = get_legal_moves(i)
-                legal_moves = [move for move in legal_moves if move not in p_moves]
 
     else: 
         for m in moves:
             if position[m] <= 0: legal_moves.append(m)
-        for i in range(64):
-            if position[i] in (-1,-2,-3,-4,-5):
-                p_moves = get_legal_moves(i)
-                legal_moves = [move for move in legal_moves if move not in p_moves]
+    legal_moves = look_for_checks(index, legal_moves, black)
+    return legal_moves
+
+
+def look_for_checks(index, moves, black):
+    legal_moves = []
+    for m in moves:
+        copy = position
+        remember_piece = position[m]
+        move_piece(index, m, copy)
+        check = False
+        if black:
+            for i in range(64):
+                if position[i] in (1,2,3,4,5):
+                    if m in get_legal_moves(i, copy): check = True
+        else:
+            for i in range(64):
+                if position[i] in (-1,-2,-3,-4,-5):
+                    if m in get_legal_moves(i, copy): check = True
+        if not check: legal_moves.append(m)
+        move_piece(m , index, copy)
+        position[m] = remember_piece
     return legal_moves

@@ -1,0 +1,7 @@
+TO DO LISTE:
+
+- Bei Königszug auch gegnerischen König beachten
+- Bei nicht König Zügen checken ob der eigene König dadurch ins Schach gesetzt werden würde
+- Schach anzeigen
+- Matt feststellen
+- special Züge (Rochade, En Pasant, Bauer umwandeln)
